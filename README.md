@@ -14,7 +14,8 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: /output_images/distorted.png "Undistorted"
-
+[image2]: /output_images/undistortedimage.png "Undistorted Pic"
+[image3]: /output_images/colorandsobel.png "Binary Process"
 
 
 **The rubric followed for this project can be found: [Here](https://review.udacity.com/#!/rubrics/571/view)**
@@ -22,8 +23,6 @@ The goals / steps of this project are the following:
 ---
 
 **Camera Calibration**
-
-#### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
 The code for this step is the functions ```readinCalibrate()``` and ```undistort(img, objpoints, imgpoints)``` located in the third code cell of the IPython notebook located: [Here](https://github.com/DavidG1011/Udacity-Advanced-Lane-Lines--P4/blob/master/Project.ipynb).
 
@@ -34,19 +33,43 @@ A visual example of this undistortion is shown below:
 ![alt text][image1]
 
 
+---
 
-***Pipeline***
+**Pipeline for [Project](https://github.com/DavidG1011/Udacity-Advanced-Lane-Lines--P4/blob/master/Project.ipynb) Notebook**
 
-#### 1. Provide an example of a distortion-corrected image.
+---
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
+**1. Undistortion:**
+
+The first step of the pipeline is to undistort the incoming images. This is to ensure that each image is properly represented, which is especially important when doing something as visual as lane line detection. Once each checkerboard image is read in once with ```readinCalibrate()```, it is no longer necessary to do, as we have the correct image points to apply to other images for undistortion. Therefore, only ```undistort()``` is used for each new image. Again, these functions are located in code cell 3 of the above notebook. 
+
 ![alt text][image2]
 
-#### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+---
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+**2. Color Spaces, Binary Transformations:**
+
+For this project, I decided to use a combination of HSV color space thresholding and an x direction sobel operation.
+
+First, I used my function ```convertHSV()``` located in code cell 3 to convert passed in images to HSV color space by using the cv2 function ```cv2.cvtColor(img, cv2.COLOR_RGB2HSV)``` then,  I created a binary image of the same dimensions as the input image and thresholded my desired color values for each channel of HSV. I wanted to be able to detect both white and yellow lane colors in my images, and set my thresholds as such:
+
+**HSV Values:**
+
+| Color      | Low Thresh    |       High Thresh|  
+|:-------------:|:----------:|:----------------:| 
+| White    | 20,0,180    |      255,80,255  | 
+| Yellow     |  10,100,90 |    22,220,255 |
+
+
+For the sobel operator, I used my function ```sobelx()``` --also located in code cell 3, to grayscale an image and apply the ```cv2.Sobel()``` function. Similarly to the HSV binary, I also created one for the sobel operator and applied a threshold of 30 for the low and 100 for the high. I also applied blur with a kernel size of 7 to smooth unwanted pixel data.
+
+Finally, I blended the 3 binary images together by creating a blank image and drawing found pixels in each individual frame onto the complete frame. The code for this process can be found in code cell 6 of the notebook.
+
+A visual representation of this process:
+
 
 ![alt text][image3]
+
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
