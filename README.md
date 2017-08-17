@@ -153,7 +153,11 @@ Next, I continued the steps of the sliding window approach. This approach entail
 
 **Calculating Radius And Offset:**
 
-The code for these 2 calculations is in code cell 3, using function ```curveAndOffset()```. This function takes the fitted lines detailed above and calculates the radius of the lines in pixels, using ```ym_per_pix = 30./720``` and ```xm_per_pix = 3.7/700``` as a rough conversion of meters to pixel space. The offset is calculated by 
+The code for these 2 calculations is in code cell 3.
+
+using function ```curveAndOffset()```. This function takes the fitted lines detailed above and calculates the radius of the lines in pixels, using ```ym_per_pix = 30./720``` and ```xm_per_pix = 3.7/700``` as a rough conversion of meters to pixel space. 
+
+The offset is calculated by 
 
 I did this in lines # through # in my code in `my_other_file.py`
 
