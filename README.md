@@ -24,15 +24,17 @@ The goals / steps of this project are the following:
 [image8]: /output_images/coloredlines.png "Colored Lines"
 [image9]: /output_images/overlaydata.png "Overlayed"
 
-
+---
 
 **The rubric followed for this project can be found: [Here](https://review.udacity.com/#!/rubrics/571/view)**
+
+**[Notebook](https://github.com/DavidG1011/Udacity-Advanced-Lane-Lines--P4/blob/master/Untitled.ipynb)**
 
 ---
 
 **Camera Calibration**
 
-The code for this step is the functions ```readinCalibrate()``` and ```undistort(img, objpoints, imgpoints)``` located in the third code cell of the IPython notebook located: [Here](https://github.com/DavidG1011/Udacity-Advanced-Lane-Lines--P4/blob/master/Project.ipynb).
+The code for this step is the functions ```readinCalibrate()``` and ```undistort(img, objpoints, imgpoints)``` located in the third code cell of the IPython notebook located: [Here](https://github.com/DavidG1011/Udacity-Advanced-Lane-Lines--P4/blob/master/Untitled.ipynb).
 
 The former function reads in a collection of checkerboard images taken from various angles and with various distortions. The images are converted to grayscale and then the cv2 function ```cv2.findChessboardCorners()``` is used to find the corners of the checkerboard. A corner being an edge where 2 white and 2 black squares intersect. These corners are then used to create image points which will be mapped to undistorted object points. These points are then used in the cv2 function ```cv2.calibrateCamera()``` to generate the camera matrix and distortion coefficients. These are finally used in the cv2 function ```cv2.undistort()``` to generate an image that is free of distortion.
 
@@ -181,17 +183,28 @@ The code for a single frame of this can be seen in code cell 11 of the python no
 The code for drawing the lane marking is in code cell 3, function ```drawUntransformLines()``` 
 
 
+by using ```cv2.fillPoly()``` and our old friend ```transform()``` in inverse, we can draw a polygon over our detected lane lines on the perspective transformed binary and then do an inverse perspective transform to have a natural space marking of where our detected lines are. This is then combined with our original colored and, of course, undistorted image using ```cv2.addWeighted()``` This gives us our final overlayed output, as also shown above:
+
+
+![alt text][image9]
+
 
 
 
 
 ---
 
-### Pipeline (video)
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+**Final Pipeline** 
 
-Here's a [link to my video result](/project_video.mp4)
+The final video pipeline for this project is located in, you guessed it, code cell 3. function: ```videopipeline()```.
+
+Code for a single frame of the pipeline can be run from cell 11 in the python notebook. Code for the full pipeline is in code cell 12.
+
+
+
+Here's a [link to my video result](/Final_Ouput.mp4)
+
 
 ---
 
