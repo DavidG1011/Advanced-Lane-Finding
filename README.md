@@ -20,6 +20,7 @@ The goals / steps of this project are the following:
 [image5]: /output_images/diagramoftransf.png "Transform Diagram"
 [image6]: /output_images/binarytransformed.png "Binary Transformed"
 [image7]: /output_images/histogram.png "Histogram"
+[image8]: /output_images/coloredlines.png "Colored Lines"
 
 
 **The rubric followed for this project can be found: [Here](https://review.udacity.com/#!/rubrics/571/view)**
@@ -142,9 +143,17 @@ By creating a histogram of the bottom half of the above image, we can identify l
 As can be seen above, the left lane is clearly identified. However, in this particular image, the right lane is not entirely confidently identified. To counter this, I moved the midpoint of the histogram over about 200 pixels so that the center between the lane lines is not accidentally identified as a lane line in the case of excess image noise from shadows, debris, etc. This works because the lane lines are always going to be a certain distance apart and, theoretically, the right lane will never be that close to the left lane.
 
 
-Next, I continued the steps of the sliding window approach. This approach entails dividing the source image into slices and identifying non-zero pixels in each slice, then concatenating those indices to be used with ```np.polyfit()``` to fit a second order polynomial to each index. 
+Next, I continued the steps of the sliding window approach. This approach entails dividing the source image into slices and identifying non-zero pixels in each slice, then concatenating those indices to be used with ```np.polyfit()``` to fit a second order polynomial to each index. These detected lines are then colored red and blue to represent the respective lane. A line is also calculated and fit over to have a visual representation of where each lane line is. This line calculation and drawing can be seen for a single frame in code cell 9 of the python notebook. 
 
-#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+
+![alt text][image8]
+
+
+---
+
+**Calculating Radius And Offset:**
+
+The code for these 2 calculations is in code cell 3, using function ```curveAndOffset()```. This function takes the fitted lines detailed above and calculates the radius of the lines in pixels, using ```ym_per_pix = 30./720``` and ```xm_per_pix = 3.7/700``` as a rough conversion of meters to pixel space. The offset is calculated by 
 
 I did this in lines # through # in my code in `my_other_file.py`
 
