@@ -71,7 +71,7 @@ First, I used my function ```convertHSV()``` located in code cell 3 to convert p
 | Yellow     |  10,100,90 |    22,220,255 |
 
 
-For the sobel operator, I used my function ```sobelx()``` --also located in code cell 3, to grayscale an image and apply the ```cv2.Sobel()``` function. Similarly to the HSV binary, I also created one for the sobel operator and applied a threshold of 30 for the low and 100 for the high. I also applied blur with a kernel size of 7 to smooth unwanted pixel data.
+For the sobel operator, I used my function ```sobelx()``` --also located in code cell 3, to grayscale an image and apply the ```cv2.Sobel()``` function. Similarly to the HSV binary, I also created one for the sobel operator and applied a threshold of 45 for the low and 100 for the high. I also applied blur with a kernel size of 7 to smooth unwanted pixel data.
 
 Finally, I blended the 3 binary images together by creating a blank image and drawing found pixels in each individual frame onto the complete frame. The code for this process can be found in code cell 6 of the notebook.
 
@@ -89,10 +89,10 @@ The code used to transform images can be found in code cell 3 of the python note
 
 | Source      | Destination   | 
 |:-----------:|:-------------:| 
-| 529,466     | 139,0         | 
-| 751,466     | 1141,0        |
-| 1218,675    | 1141,720      |
-| 62,675      | 139,720       |
+|580,475      |      350,0    |
+|700,475      |     950,0     |
+|900,675      |    950,720    | 
+|380,675      |   350,720     |
 
 These points are put into an array and used with the function ```cv2.getPerspectiveTransform(src, dst)``` to caculate the perspective transform. ```cv2.warpPerspective()``` is then used to perform the perspective transformation. 
 
@@ -147,7 +147,7 @@ By creating a histogram of the bottom half of the above image, we can identify l
 ![alt text][image7]
 
 
-As can be seen above, the left lane is clearly identified. However, in this particular image, the right lane is not entirely confidently identified. To counter this, I moved the midpoint of the histogram over about 200 pixels so that the center between the lane lines is not accidentally identified as a lane line in the case of excess image noise from shadows, debris, etc. This works because the lane lines are always going to be a certain distance apart and, theoretically, the right lane will never be that close to the left lane.
+As can be seen above, the left lane is clearly identified. However, in this particular image, the right lane is not entirely confidently identified. To counter this, I moved the midpoint of the histogram over about 300 pixels so that the center between the lane lines is not accidentally identified as a lane line in the case of excess image noise from shadows, debris, etc. This works because the lane lines are always going to be a certain distance apart and, theoretically, the right lane will never be that close to the left lane.
 
 
 Next, I continued the steps of the sliding window approach. This approach entails dividing the source image into slices and identifying non-zero pixels in each slice, then concatenating those indices to be used with ```np.polyfit()``` to fit a second order polynomial to each index. These detected lines are then colored red and blue to represent the respective lane. A line is also calculated and fit over to have a visual representation of where each lane line is. This line calculation and drawing can be seen for a single frame in code cell 10 of the python notebook. 
@@ -162,7 +162,7 @@ Next, I continued the steps of the sliding window approach. This approach entail
 
 The code for these 2 calculations is in code cell 3.
 
-Using function ```curveAndOffset()```. This function takes the fitted lines detailed above and calculates the radius of the lines in pixels, using ```ym_per_pix = 30./720``` and ```xm_per_pix = 3.7/700``` as a rough conversion of meters to pixel space. 
+Using function ```curveAndOffset()```. This function takes the fitted lines detailed above and calculates the radius of the lines in pixels, using ```ym_per_pix = 15./720``` and ```xm_per_pix = 3.7/700``` as a rough conversion of meters to pixel space. 
 
 The offset is calculated by finding the lane center: ```lane_center = (left_fitx[-1] + right_fitx[-1])/2```, and calculating how far the lane center is from the center of the image ```lane_center = (left_fitx[-1] + right_fitx[-1])/2```. This output is then converted to pixel space by using the conversion above: ```xm_per_pix = 3.7/700```. 
 
@@ -201,6 +201,7 @@ The final video pipeline for this project is located in, you guessed it, code ce
 
 Code for a single frame of the pipeline can be run from cell 11 in the python notebook. Code for the full pipeline is in code cell 12.
 
+The ```videopipeline()``` function combines all the previously mentioned steps into one pipeline to process each frame of the video.
 
 
 [Link to final video](https://github.com/DavidG1011/Udacity-Advanced-Lane-Lines--P4/blob/master/Final_Output.mp4)
