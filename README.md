@@ -16,6 +16,10 @@ The goals / steps of this project are the following:
 [image1]: /output_images/distorted.png "Undistorted"
 [image2]: /output_images/undistortedimage.png "Undistorted Pic"
 [image3]: /output_images/colorandsobel.png "Binary Process"
+[image4]: /output_images/linesdrawn.png "Source Drawn"
+[image5]: /output_images/diagramoftransf.png "Transform Diagram"
+[image6]: /output_images/binarytransformed.png "Binary Transformed"
+[image7]: /output_images/histogram.png "Histogram"
 
 
 **The rubric followed for this project can be found: [Here](https://review.udacity.com/#!/rubrics/571/view)**
@@ -71,41 +75,74 @@ A visual representation of this process:
 ![alt text][image3]
 
 
-#### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+---
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+**Perspective Transformation:***
 
-```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
-```
+The code used to transform images can be found in code cell 3 of the python notebook, particularly the function ```transform()```. This function uses source and destination points to convert the passed in image into an overhead perspective. This is accomplished with hardcoded source and destination points. The points chosen for this transformation are as follows:
 
-This resulted in the following source and destination points:
+| Source      | Destination   | 
+|:-----------:|:-------------:| 
+| 529,466     | 139,0         | 
+| 751,466     | 1141,0        |
+| 1218,675    | 1141,720      |
+| 62,675      | 139,720       |
 
-| Source        | Destination   | 
-|:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+These points are put into an array and used with the function ```cv2.getPerspectiveTransform(src, dst)``` to caculate the perspective transform. ```cv2.warpPerspective()``` is then used to perform the perspective transformation. 
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+Some visuals to demonstrate:
+
+
+**Source Points Drawn:**
+
 
 ![alt text][image4]
 
-#### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+Points drawn to mark out the area of interest. 
+
+
+**Transformation Applied** 
+
 
 ![alt text][image5]
+
+
+A diagram of the process. The ```tranform()``` function from code cell 3 also has an option to invert the transformation by simply swapping the source and destination order in the ```cv2.getPerspectiveTransform()``` function. This inverse transform is labeled above.
+The code to perform this process on a single frame is located in code cell 7 of the python notebook.
+
+
+
+This process can then also be applied to the binary images demonstrated in the previous section.
+
+
+**Binary Transformed:**
+
+
+![alt text][image6]
+
+
+
+---
+
+**Detecting Lane Pixels**
+
+The code for the process of identifying lane pixels is contained in a function called ```drawTransformLines()``` in code cell 3 of the python notebook. This code is referenced from Project: Adavnced Lane Lines, Pt 33. Finding Lane Lines
+
+The first step of the process is to create a histogram of the lower half of the transformed binary image. This is a good starting point because you can separate the histogram down the middle and somewhat confidently identify the strongest concentration of pixels on the left half of the histogram as the left lane, and the strongest right side as the right lane.
+
+![alt text][image6]
+
+
+By creating a histogram of the bottom half of the above image, we can identify lane lines a good portion of the time. The code to display the histogram of a single frame is located in code cell 8. 
+
+![alt text][image7]
+
+
+As can be seen above, the left lane is clearly identified. However, in this particular image, the right lane is not entirely confidently identified. To counter this, I moved the midpoint of the histogram over about 200 pixels so that the center between the lane lines is not accidentally identified as a lane line in the case of excess image noise from shadows, debris, etc. This works because the lane lines are always going to be a certain distance apart and, theoretically, the right lane will never be that close to the left lane.
+
+
+Next, I continued the steps of the sliding window approach. This approach entails dividing the source image into slices and identifying non-zero pixels in each slice, then concatenating those indices to be used with ```np.polyfit()``` to fit a second order polynomial to each index. 
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
