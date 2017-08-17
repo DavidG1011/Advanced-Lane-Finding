@@ -203,7 +203,7 @@ Code for a single frame of the pipeline can be run from cell 11 in the python no
 
 
 
-Here's a [link to my video result](/Final_Ouput.mp4)
+[Link to final video](/Final_Ouput.mp4)
 
 
 ---
