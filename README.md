@@ -167,6 +167,7 @@ The offset is calculated by finding the lane center: ```lane_center = (left_fitx
 These are then overlayed on the output image for easy visual representation.
 
 
+![alt text][image9]
 
 
 The code for a single frame of this can be seen in code cell 11 of the python notebook. Note: This is actually the full pipeline for video processing only used on one frame, so the overlayed lane marker is visible.
