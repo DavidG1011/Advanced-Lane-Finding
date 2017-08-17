@@ -210,6 +210,10 @@ Code for a single frame of the pipeline can be run from cell 11 in the python no
 
 ### Discussion
 
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+1. Finding an adequate color space was definitely a huge challenge. I initially chose to use HLS color space but it proved difficult due to poor detection once there were shadows or other changing road gradients. I initially only used one channel, thinking it would perhaps be enough due to the S channel performing well in single frame viewings. This was not the case, any shift in shadows and it was goodbye any hope of lane detection. I think choosing HSV was a good choice, and using every channel was definitely a step in the right direction. Thresholding yellow and white values seems to perform quite well.
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+2. Another issue I had was tuning my Sobel operator to be just right. Too low of threshold and it would detect too much, causing shadows to be considered lane lines. I think I have a good value but any darker condition may send it out of control.
+
+3. I could see my algorithm failing in darker conditions perhaps, the Sobel operator is a fickle mistress that needs to be tuned just right, and I'm not sure if it's good enough to be hand tuned. I may need to look into programmatically chosen thresholding in the future.  
+
+4. In order to improve my algorithm, I think I would need far more color filtering and gradient detections but tuned lower so each filter identifies perfectly its own little flavor of the road. I think only using 3 filtering options, each part needs to do a lot of heavy lifting under different road conditions, and inevitably some paramaters pick up extra noise. I don't believe I'm experienced enough with lane finding to exactly know what type of filters to conbine for the golden formula. Ideally I would want to keep it efficient as well, which may prove difficult.
