@@ -13,6 +13,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
+
 [image1]: /output_images/distorted.png "Undistorted"
 [image2]: /output_images/undistortedimage.png "Undistorted Pic"
 [image3]: /output_images/colorandsobel.png "Binary Process"
@@ -21,6 +22,8 @@ The goals / steps of this project are the following:
 [image6]: /output_images/binarytransformed.png "Binary Transformed"
 [image7]: /output_images/histogram.png "Histogram"
 [image8]: /output_images/coloredlines.png "Colored Lines"
+[image9]: /output_images/overlaydata.png "Overlayed"
+
 
 
 **The rubric followed for this project can be found: [Here](https://review.udacity.com/#!/rubrics/571/view)**
@@ -123,6 +126,8 @@ This process can then also be applied to the binary images demonstrated in the p
 ![alt text][image6]
 
 
+This binary transform code can be seen for a single frame in code cell 8
+
 
 ---
 
@@ -135,7 +140,7 @@ The first step of the process is to create a histogram of the lower half of the 
 ![alt text][image6]
 
 
-By creating a histogram of the bottom half of the above image, we can identify lane lines a good portion of the time. The code to display the histogram of a single frame is located in code cell 8. 
+By creating a histogram of the bottom half of the above image, we can identify lane lines a good portion of the time. The code to display the histogram of a single frame is located in code cell 9. 
 
 ![alt text][image7]
 
@@ -143,7 +148,7 @@ By creating a histogram of the bottom half of the above image, we can identify l
 As can be seen above, the left lane is clearly identified. However, in this particular image, the right lane is not entirely confidently identified. To counter this, I moved the midpoint of the histogram over about 200 pixels so that the center between the lane lines is not accidentally identified as a lane line in the case of excess image noise from shadows, debris, etc. This works because the lane lines are always going to be a certain distance apart and, theoretically, the right lane will never be that close to the left lane.
 
 
-Next, I continued the steps of the sliding window approach. This approach entails dividing the source image into slices and identifying non-zero pixels in each slice, then concatenating those indices to be used with ```np.polyfit()``` to fit a second order polynomial to each index. These detected lines are then colored red and blue to represent the respective lane. A line is also calculated and fit over to have a visual representation of where each lane line is. This line calculation and drawing can be seen for a single frame in code cell 9 of the python notebook. 
+Next, I continued the steps of the sliding window approach. This approach entails dividing the source image into slices and identifying non-zero pixels in each slice, then concatenating those indices to be used with ```np.polyfit()``` to fit a second order polynomial to each index. These detected lines are then colored red and blue to represent the respective lane. A line is also calculated and fit over to have a visual representation of where each lane line is. This line calculation and drawing can be seen for a single frame in code cell 10 of the python notebook. 
 
 
 ![alt text][image8]
@@ -155,17 +160,29 @@ Next, I continued the steps of the sliding window approach. This approach entail
 
 The code for these 2 calculations is in code cell 3.
 
-using function ```curveAndOffset()```. This function takes the fitted lines detailed above and calculates the radius of the lines in pixels, using ```ym_per_pix = 30./720``` and ```xm_per_pix = 3.7/700``` as a rough conversion of meters to pixel space. 
+Using function ```curveAndOffset()```. This function takes the fitted lines detailed above and calculates the radius of the lines in pixels, using ```ym_per_pix = 30./720``` and ```xm_per_pix = 3.7/700``` as a rough conversion of meters to pixel space. 
 
-The offset is calculated by 
+The offset is calculated by finding the lane center: ```lane_center = (left_fitx[-1] + right_fitx[-1])/2```, and calculating how far the lane center is from the center of the image ```lane_center = (left_fitx[-1] + right_fitx[-1])/2```. This output is then converted to pixel space by using the conversion above: ```xm_per_pix = 3.7/700```. 
 
-I did this in lines # through # in my code in `my_other_file.py`
+These are then overlayed on the output image for easy visual representation.
 
-#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
 
-![alt text][image6]
+
+The code for a single frame of this can be seen in code cell 11 of the python notebook. Note: This is actually the full pipeline for video processing only used on one frame, so the overlayed lane marker is visible.
+
+
+---
+
+**Plotting The Lane Marker**
+
+
+The code for drawing the lane marking is in code cell 3, function ```drawUntransformLines()``` 
+
+
+
+
+
 
 ---
 
@@ -173,7 +190,7 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](/project_video.mp4)
 
 ---
 
