@@ -215,6 +215,6 @@ The ```videopipeline()``` function combines all the previously mentioned steps i
 
 2. Another issue I had was tuning my Sobel operator to be just right. Too low of threshold and it would detect too much, causing shadows to be considered lane lines. I think I have a good value but any darker condition may send it out of control.
 
-3. I could see my algorithm failing in darker conditions perhaps, the Sobel operator is a fickle mistress that needs to be tuned just right, and I'm not sure if it's good enough to be hand tuned. I may need to look into programmatically chosen thresholding in the future.  
+3. I could see my algorithm failing in darker conditions perhaps, the Sobel operator is a fickle beast that needs to be tuned just right, and I'm not sure if it works well enough when hand tuned. I may need to look into programmatically chosen thresholding in the future.  
 
 4. In order to improve my algorithm, I think I would need far more color filtering and gradient detections but tuned lower so each filter identifies perfectly its own little flavor of the road. I think only using 3 filtering options, each part needs to do a lot of heavy lifting under different road conditions, and inevitably some paramaters pick up extra noise. I don't believe I'm experienced enough with lane finding to exactly know what type of filters to conbine for the golden formula. Ideally I would want to keep it efficient as well, which may prove difficult.
